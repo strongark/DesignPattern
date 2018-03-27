@@ -1,5 +1,7 @@
 package Testing;
 
+import CodeFight.Node;
+
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Stack;
@@ -97,11 +99,6 @@ public class Hacker24h {
         return sum;//1+2*(1+3*1)
     }
 
-
-    void reverseList(Node list, int k){
-        Stack<Node> stk = new Stack<>();
-
-    }
 
     class Node {
         Integer data;

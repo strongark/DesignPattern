@@ -1,4 +1,5 @@
 package Testing;
+import java.math.BigInteger;
 import java.util.*;
 import java.util.Arrays;
 import java.util.regex.Pattern;
@@ -10,6 +11,45 @@ import java.util.regex.Pattern;
 public class Testing {
     static int stringCount=0;
 
+    public int[] listPrimeNumber(int n){
+        int i=0, j=2;
+        int[] res = new int[n];
+        while (i<n){
+            while (!(new BigInteger(j+"")).isProbablePrime(10))
+//            while (!isPrime(j))
+                j++;
+            res[i++]=j;
+            j++;
+        }
+        return res;
+    }
+
+    public boolean isPrime(int n){
+        if(n<2)
+            return false;
+        for(int i=2;i<=Math.sqrt(n);i++){
+            if(n%i==0)
+                return false;
+        }
+        return true;
+    }
+    public int[] listPrimeNumberBySieve(int n){
+        boolean[] isNotPrimeNumbers = new boolean[1000+1];
+        for(int i=2;i<isNotPrimeNumbers.length;i++){
+            if(!isNotPrimeNumbers[i]){
+                for(int j=2;i*j<isNotPrimeNumbers.length;j++){
+                    isNotPrimeNumbers[j*i]=true;
+                }
+            }
+        }
+        int j=0;
+        int[] res = new int[n];
+        for(int i=2;j<n && i<isNotPrimeNumbers.length;i++){
+            if(!isNotPrimeNumbers[i])
+                res[j++]=i;
+        }
+        return res;
+    }
     public static void main(String[] args){
 
         Scanner scanner = new Scanner(System.in);
