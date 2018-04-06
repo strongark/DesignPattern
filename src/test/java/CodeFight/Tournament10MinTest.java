@@ -12,6 +12,35 @@ import static org.junit.Assert.*;
  */
 public class Tournament10MinTest {
     @Test
+    public void permuteDotInString() throws Exception {
+        tnm.permuteDotInString("Hello");
+    }
+
+    @Test
+    public void mod() throws Exception {
+        Assert.assertEquals(2306996%16,tnm.mod(2306996,16));
+
+    }
+
+    @Test
+    public void higherVersion() throws Exception {
+        Assert.assertEquals(true,tnm.higherVersion("1.2.2","1.2.0"));
+    }
+
+    @Test
+    public void firstMultiple() throws Exception {
+    }
+
+
+    @Test
+    public void unusualLexOrder() throws Exception {
+        String[] words= {"nigeb","ta","eht","gninnigeb"};
+        String[] expected = {"ta","nigeb","gninnigeb","eht"};
+        String[] actual= tnm.unusualLexOrder(words);
+        Assert.assertArrayEquals(expected,actual);
+    }
+
+    @Test
     public void maxSubmatrixSum() throws Exception {
         int[][]matrix= {{1,12,11,10},
                         {4,3,2,9},

@@ -12,6 +12,7 @@ public class Testing {
     static int stringCount=0;
 
     public int[] listPrimeNumber(int n){
+
         int i=0, j=2;
         int[] res = new int[n];
         while (i<n){
@@ -21,6 +22,7 @@ public class Testing {
             res[i++]=j;
             j++;
         }
+
         return res;
     }
 

@@ -10,6 +10,11 @@ import static org.junit.Assert.*;
  */
 public class ArcadeTest {
     @Test
+    public void isBeautifulString() throws Exception {
+        Assert.assertFalse(arcade.isBeautifulString("zaa"));
+    }
+
+    @Test
     public void stringsRearrangement() throws Exception {
         String[] inputArray= {"abc",
                 "bef",

@@ -9,6 +9,29 @@ import java.util.regex.Pattern;
  */
 public class Arcade {
 
+    public boolean isBeautifulString(String s) {
+
+        StringBuffer buff = new StringBuffer();
+        StringBuilder buff2 = new StringBuilder(s);
+
+        int prevOc=Integer.MAX_VALUE;
+        int currC=1;
+        for(int i=1;i<s.length();i++){
+            if(s.charAt(i)==s.charAt(i-1)){
+                currC++;
+                if(currC>prevOc)
+                    return false;
+            } else {
+                if(currC>prevOc)
+                    return false;
+                else
+                    prevOc=currC;
+                currC=1;
+            }
+        }
+        return true;
+    }
+
     int calculationsWithCoins(int a, int b, int c) {
 
         Set<Integer> set = new HashSet<>();

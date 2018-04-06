@@ -1,12 +1,102 @@
 package CodeFight;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by tranpham on 3/14/18.
  */
 public class Tournament10Min {
+    //only true if d is a power of 2
+    public int mod(int a, int d){
+        return a & (d-1);
+    }
+
+    public void permuteDotInString(String s){
+        StringBuffer buff = new StringBuffer();
+        permuteDotInStringHelper(s, buff,1);
+    }
+
+    private void permuteDotInStringHelper(String s, StringBuffer dotString, int idx){
+        if (idx>=s.length())
+            return;
+        for(int i=idx;i<s.length();i++){
+            dotString.insert(idx,".");
+            System.out.println(s.toString());
+            permuteDotInStringHelper(s,dotString,i+1);
+            dotString.deleteCharAt(idx);
+        }
+    }
+
+    public int gcd(int a, int b) {
+        while (a > 0) {
+            int tmp = a;
+            a = b % a;
+            b = tmp;
+        }
+        return b;
+    }
+    String htmlEndTagByStartTag(String startTag) {
+        Matcher matcher= Pattern.compile("<[a-zA-Z][a-zA-Z0-9]*\\b").matcher(startTag);
+        if(matcher.find()){
+            return "</"+startTag.substring(matcher.start()+1,matcher.end());
+        }
+        return "";
+    }
+
+
+    public boolean higherVersion(String ver1, String ver2) {
+        String[] arrV1= ver1.split("\\.");
+        String[] arrV2= ver2.split("\\.");
+        for(int i=0;i<arrV1.length;i++){
+            int n1=Integer.parseInt(arrV1[i]);
+            int n2=Integer.parseInt(arrV2[i]);
+            if(n1>n2){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public int firstMultiple(int[] divisors, int start) {
+        int com = divisors[0];
+        for(int i=1;i<divisors.length;i++){
+            com = smalessCommonDiv(com,divisors[i]);
+        }
+
+        int step = com;
+        while(com<start)
+            com+=step;
+        return com;
+    }
+
+    int smalessCommonDiv(int a, int b){
+        if(a<b)
+            return smalessCommonDiv(b,a);
+
+        for(int i=1;i<=b;i++)
+            if(a*i%b==0)
+                return a*i;
+
+        return -1;
+    }
+
+    public String[] unusualLexOrder(String[] words) {
+        Arrays.sort(words,(str1,str2)->{
+            return reverse(str1).compareTo(reverse(str2));
+        });
+        return words;
+    }
+
+    String reverse(String string){
+        StringBuffer buff = new StringBuffer();
+        buff.append(string);
+        return buff.reverse().toString();
+    }
 
     public boolean robotWalk(int[] a) {
 
