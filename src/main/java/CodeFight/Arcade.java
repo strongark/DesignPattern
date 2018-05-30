@@ -9,6 +9,42 @@ import java.util.regex.Pattern;
  */
 public class Arcade {
 
+    String messageFromBinaryCode(String code) {
+        String piece = code.substring(0,8);
+        int currIdx = 8;
+        StringBuilder msg = new StringBuilder();
+        while(currIdx<=code.length()){
+            char c = binaryToChar(piece);
+            msg.append(c);
+            piece = msg.substring(currIdx,currIdx+8);
+            currIdx+=8;
+        }
+        String a="";
+        return msg.toString();
+    }
+
+    public char binaryToChar(String binary){
+        int p=0;
+        int n=0;
+        for(int i=binary.length()-1;i>=0;i--){
+            n+= (binary.charAt(i)-'0')*Math.pow(2,p++);
+        }
+
+        return (char)n;
+    }
+
+    public int differentSquares(int[][] matrix) {
+        return Arrays.deepHashCode(matrix);
+    }
+
+    boolean isEqualArray(int[][] arr1, int[][] arr2){
+        if(arr1[0][0]!=arr2[0][0] || arr1[1][1]!=arr2[1][1]
+                ||arr1[0][1]!=arr2[0][1] || arr1[1][0]!=arr2[1][0]){
+            return false;
+        }
+        return true;
+    }
+
     public boolean isBeautifulString(String s) {
 
         StringBuffer buff = new StringBuffer();

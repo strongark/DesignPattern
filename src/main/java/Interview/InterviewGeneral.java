@@ -1,6 +1,10 @@
 package Interview;
 
+import CodeFight.MaxHeap;
+import CodeFight.MinHeap;
+
 import java.awt.*;
+import java.io.IOException;
 import java.util.*;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -12,6 +16,216 @@ import java.util.stream.Collectors;
  */
 public class InterviewGeneral {
 
+    int[] findMaxSumArray(int[] array){
+        return null;
+    }
+
+    public List<String> reorderLines(int logFileSize, List<String> logLines)
+    {
+        List<String> textLog = logLines.stream().filter((str) -> {
+            String[] strArr = str.split("\\s");
+            if(strArr[1].charAt(0)>='a' && strArr[1].charAt(0)<='z')
+                return true;
+            return false;
+        }).collect(Collectors.toList());
+        textLog.sort((o1,o2) -> {
+            String subStr1 = o1.substring(o1.indexOf(' ')+1);
+            String subStr2 = o2.substring(o2.indexOf(' ')+1);
+            int res = subStr1.compareTo(subStr2);
+            if(res==0)
+                res = o1.compareTo(o2);
+            return res;
+        });
+        List<String> numLog = logLines.stream().filter((str) -> {
+            String[] strArr = str.split("\\s");
+            if(strArr[1].charAt(0)>='0' && strArr[1].charAt(0)<='9')
+                return true;
+            return false;
+        }).collect(Collectors.toList());
+        textLog.addAll(numLog);
+        return textLog;
+        // WRITE YOUR CODE HERE
+    }
+
+    public List<String> retrieveMostFrequentlyUsedWords(String literatureText,
+                                                 List<String> wordsToExclude)
+    {
+        Set<String> excludeSet = new HashSet<String>();
+        for(String str:wordsToExclude)
+            excludeSet.add(str);
+        String[] words = literatureText.split("\\s");
+
+        HashMap<String,Integer> hm = new HashMap<>();
+        for(String word:words){
+            if(!excludeSet.contains(word)){
+                if(!hm.containsKey(word))
+                    hm.put(word,0);
+                hm.put(word,hm.get(word)+1);
+            }
+        }
+        Map.Entry<String,Integer> maxEntry = null;
+        for(Map.Entry<String,Integer> entry:hm.entrySet()){
+            if(maxEntry==null || entry.getValue()>maxEntry.getValue())
+                maxEntry = entry;
+        }
+        final int maxVal = maxEntry.getValue();
+
+//        List<String> res =hm.entrySet().stream().filter((o1)->{return o1.getValue()==maxVal;})
+//                                        .map(Map.Entry::getKey).collect(Collectors.toList());
+        List<String> res = new LinkedList<>();
+        for(Map.Entry<String,Integer> entry:hm.entrySet()){
+            if(entry.getValue()==maxVal)
+                res.add(entry.getKey());
+        }
+        return res;
+        // WRITE YOUR CODE HERE
+    }
+
+    public float[] runningMedian(int[] a) {
+        /*
+         * Write your code here.
+         */
+        PriorityQueue<Integer> minQueueRight = new PriorityQueue<Integer>(a.length,(n1,n2) ->{return n1-n2;});
+        PriorityQueue<Integer> maxQueueLeft = new PriorityQueue<Integer>(a.length,(n1,n2) ->{return n2-n1;});
+        float[] res = new float[a.length];
+        float median = 0;
+        for(int i=0;i<a.length;i++){
+            if(maxQueueLeft.size()>minQueueRight.size()) {
+                if (a[i]>=median) {
+                    minQueueRight.add(a[i]);
+                } else {
+                    minQueueRight.add(maxQueueLeft.poll());
+                    maxQueueLeft.add(a[i]);
+                }
+            }
+            else if(maxQueueLeft.size()==minQueueRight.size()){
+                if (a[i]>=median) {
+                    minQueueRight.add(a[i]);
+                } else {
+                    maxQueueLeft.add(a[i]);
+                }
+
+            } else if(maxQueueLeft.size()<minQueueRight.size()){
+                if (a[i]>=median) {
+                    minQueueRight.add(a[i]); //2 more on the right
+                    maxQueueLeft.add(minQueueRight.poll()); //rebalance
+                } else {
+                    maxQueueLeft.add(a[i]);
+                }
+            }
+
+            if(maxQueueLeft.size()>minQueueRight.size())
+                median = maxQueueLeft.peek();
+            else if(maxQueueLeft.size()==minQueueRight.size())
+                //now size of 2 heap are the same
+                median = (minQueueRight.peek() + maxQueueLeft.peek()) / 2.0f;
+            else {
+                median = minQueueRight.peek();
+            }
+
+            res[i]=median;
+        }
+        return res;
+    }
+
+    public float[] runningMedian2(int[] a)  {
+        /*
+         * Write your code here.
+         */
+        ArrayList<Integer> arrList = new ArrayList<>();
+        MinHeap minHeapRight = new MinHeap(a.length);
+        MaxHeap maxHeapLeft = new MaxHeap(a.length);
+        float[] res = new float[a.length];
+        float median = 0;
+        for(int i=0;i<a.length;i++){
+            try {
+                if(maxHeapLeft.size()>minHeapRight.size()) {
+                    if (a[i]>=median) {
+                        minHeapRight.insertKey(a[i]);
+                    } else {
+                        minHeapRight.insertKey(maxHeapLeft.extractRoot());
+                        maxHeapLeft.insertKey(a[i]);
+                    }
+                }
+                else if(maxHeapLeft.size()==minHeapRight.size()){
+                    if (a[i]>=median) {
+                        minHeapRight.insertKey(a[i]);
+                    } else {
+                        maxHeapLeft.insertKey(a[i]);
+                    }
+
+                } else if(maxHeapLeft.size()<minHeapRight.size()){
+                    if (a[i]>=median) {
+                        minHeapRight.insertKey(a[i]); //2 more on the right
+                        maxHeapLeft.insertKey(minHeapRight.extractRoot()); //rebalance
+                    } else {
+                        maxHeapLeft.insertKey(a[i]);
+                    }
+                }
+
+                if(maxHeapLeft.size()>minHeapRight.size())
+                    median = maxHeapLeft.getRoot();
+                else if(maxHeapLeft.size()==minHeapRight.size())
+                    //now size of 2 heap are the same
+                    median = (minHeapRight.getRoot() + maxHeapLeft.getRoot()) / 2.0f;
+                else {
+                    median = minHeapRight.getRoot();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            res[i]=median;
+        }
+        return res;
+    }
+    static double getMedian(ArrayList<Integer> arr){
+        if(arr.size()%2==0){
+            return (arr.get(arr.size()/2) + arr.get(arr.size()/2-1))/2.0d;
+        }
+        return arr.get(arr.size()/2);
+    }
+    static void binaryInsert(ArrayList<Integer> arr, int val){
+        int l = 0;
+        int r=arr.size()-1;
+        int m = (l+r)/2;
+        while(l<r){
+            if(arr.get(m)>val)
+                r=m;
+            if(arr.get(m)<val)
+                l=m;
+        }
+        //l is the position we need to insert
+        arr.add(l,val);
+    }
+
+    public int[] contacts(String[][] queries) {
+        /*
+         * Write your code here.
+         */
+        ArrayList<Integer> count = new ArrayList<>();
+        ArrayList<String> db = new ArrayList<>();
+
+        for(String[] q:queries){
+            if(q[0].equals("add"))
+                db.add(q[1]);
+            else{//search
+                int c=0;
+                for(String str:db){
+                    String pat = "^"+q[1]+".*";
+
+                    if(str.matches(pat))
+                        c++;
+                }
+                count.add(c);
+
+            }
+        }
+        int[] res = new int[count.size()];
+        for(int i=0;i<count.size();i++)
+            res[i] =  count.get(i);
+        return  res;
+    }
+
     public int chessKnight(String cell) {
         int[][] d={{1,2},{2,1},{2,-1},{1,-2},{-1,-2},{-2,-1},{-2,1},{-1,2}};
         int move=0;
@@ -21,6 +235,7 @@ public class InterviewGeneral {
             if(isValid(newCell))
                 move++;
         }
+
         return move;
 
     }

@@ -10,6 +10,11 @@ import static org.junit.Assert.*;
  */
 public class ArcadeTest {
     @Test
+    public void binaryToChar() throws Exception {
+        Assert.assertEquals(arcade.binaryToChar("01001000"),'H');
+    }
+
+    @Test
     public void isBeautifulString() throws Exception {
         Assert.assertFalse(arcade.isBeautifulString("zaa"));
     }
